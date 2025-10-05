@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Civil Terminal</title>
+    <style>
+      body,
+      html {
+        background-color: black;
+        color: white;
+        font-family: "Liberation Mono", monospace;
+        font-size: 11px;
+        height: 100dvh;
+        line-height: 20px;
+        margin: 0;
+        overflow: hidden;
+        padding: 0;
+      }
+      canvas {
+        width: 100dvw;
+      }
+      body,
+      html,
+      canvas {
+        user-select: none;
+      }
+    </style>
+    <script src="/language/crown.js"></script>
+  </head>
+  <body>
+    <script>
+      async function run() {
+        const rootScope = {};
+        const rootCrown = crown({
+          ...rootScope,
+          console: globalThis.console,
+          document: globalThis.document,
+          location: globalThis.location,
+        });
+        try {
+          await rootCrown.runFile("/terminal/main.cr");
+          const result = rootCrown.it();
+          console.dir({ result });
+        } catch (e) {
+          console.error(e);
+        }
+      }
+      run().catch((e) => console.error(e));
+    </script>
+  </body>
+</html>
