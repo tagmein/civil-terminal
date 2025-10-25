@@ -959,7 +959,7 @@ function crown(
               `walk[${statementIndex}]: "${command}" is not a valid operation`
             );
           }
-          console.debug(`crown ${command}`, args);
+          // console.debug(`crown ${command}`, args);
           const automaticWalk =
             {
               false: false,

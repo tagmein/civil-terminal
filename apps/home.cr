@@ -11,23 +11,31 @@ function main [
     '#f00000', '#f0f000', '#00f000', '#800000',
     '#f08000', '#008000', '#808080', '#c0c000',
   ) [ template ' %0 ' (
-    'File', 'Edit', 'Selection', 'View', 'Go', 'Run', 'Terminal', 'Help'
+    File, Edit, Selection, View, Go, Run, Terminal, Help
   ) ] [ object [
-    action [ function [
-      log Clicked Home Button
+    action [ function eX eY span [
+      set actionType (
+        File, Edit, Selection, View, Go, Run, Terminal, Help
+      )
+      log Clicked [ get actionType ] [ get span ] [ get eX ] [ get eY ]
     ] ]
     effect [
       function event x0 dx width height span [
         get event type, is click, true [
-          log click [ get span ]
           set fn [ get span options action ]
           get fn, true [
-            get fn, call [ get dx ] [ get event layerY ]
+            get fn, call [ get dx ] [ get event layerY ] [ get span ]
           ]
+        ]
+        set colorRef [ object [ value ] ]
+        get event type, is click, true [
+          set [ get colorRef ] value '#f0f080f0'
+        ], false [
+          set [ get colorRef ] value '#c0c080c0'
         ]
         global Array, call [
           list [
-            '#c0c080c0'
+            [ get colorRef value ]
             [ get x0 ]
             0
             [ get width ]
