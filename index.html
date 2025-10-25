@@ -17,12 +17,23 @@
         padding: 0;
       }
       canvas {
+        cursor: none;
         width: 100dvw;
+      }
+      canvas.effect {
+        margin-top: -24px;
+        pointer-events: none;
+        z-index: 1000;
       }
       body,
       html,
       canvas {
         user-select: none;
+      }
+      body {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
       }
     </style>
     <script src="/language/crown.js"></script>

@@ -260,7 +260,7 @@ const SCOPE = {
 };
 
 function smartJoin(basePath, filePath) {
-  return filePath.replace(/^./, basePath);
+  return filePath.startsWith("/") ? filePath : filePath.replace(/^./, basePath);
 }
 
 function uncrown(value) {
@@ -702,16 +702,16 @@ function crown(
     },
     async load(_filePath) {
       const filePath = uncrown(_filePath);
-      await new Promise(function (resolve, reject) {
+      await new Promise(async function (resolve, reject) {
         fs.readFile(
           smartJoin(basePath, filePath),
           "utf-8",
-          function (error, content) {
+          async function (error, content) {
             if (error) {
               reject(error);
             } else {
               try {
-                const fileModule = eval(`(
+                currentValue = eval(`(
          function () {
           return async function ${filePath.replace(
             /[^a-zA-Z]+/g,
@@ -721,7 +721,6 @@ function crown(
           await scope.walk(code)
           return scope
          }})()`);
-                currentValue = fileModule;
                 resolve();
               } catch (e) {
                 currentError = e;
@@ -745,6 +744,10 @@ function crown(
       currentValue = await Promise.all(
         currentValue.map(async (x) => uncrown(await callback(x)))
       );
+      return me;
+    },
+    me() {
+      currentValue = me;
       return me;
     },
     multiply(...argumentListRaw) {

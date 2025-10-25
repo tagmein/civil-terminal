@@ -192,6 +192,25 @@ async function main() {
             response.end(indexHtml);
             return;
           }
+          if (request.url.startsWith("/apps") && request.url.endsWith(".cr")) {
+            try {
+              const fileData = (
+                await readFile(
+                  join(ROOT_DIR, "apps", ...request.url.split("/").slice(2))
+                )
+              ).toString("utf-8");
+              response.setHeader("Content-Type", "text/crown");
+              response.end(fileData);
+            } catch (e) {
+              console.error(e);
+              console.dir(
+                join(ROOT_DIR, "apps", ...request.path.split("/").slice(2))
+              );
+              response.statusCode = 404;
+              response.end("Not found");
+            }
+            return;
+          }
           if (
             request.url.startsWith("/terminal") &&
             request.url.endsWith(".cr")
